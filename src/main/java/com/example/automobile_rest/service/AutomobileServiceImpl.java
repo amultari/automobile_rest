@@ -30,4 +30,9 @@ public class AutomobileServiceImpl implements AutomobileService {
 		return automobileRepository.save(input);
 	}
 
+	@Override
+	public void delete(Automobile input) {
+		automobileRepository.delete(input);
+	}
+
 }

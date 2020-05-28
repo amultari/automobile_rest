@@ -11,5 +11,7 @@ public interface AutomobileService {
 	Automobile get(Long idInput);
 	
 	Automobile save(Automobile input);
+	
+	void delete(Automobile input);
 
 }
