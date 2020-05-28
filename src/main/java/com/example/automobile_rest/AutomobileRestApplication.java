@@ -21,9 +21,17 @@ public class AutomobileRestApplication {
 	public CommandLineRunner initAutomobili(AutomobileService automobileService) {
 		return (args) -> {
 
+			//inizializzo il Db
 			automobileService.save(new Automobile("Fiat", "Tipo", "AB987UI",
 					new SimpleDateFormat("dd/MM/yyyy").parse("28/12/2018"), true));
+			automobileService.save(new Automobile("Fiat", "500", "HG987UI",
+					new SimpleDateFormat("dd/MM/yyyy").parse("28/09/2018"), true));
+			automobileService.save(new Automobile("VW", "Golf", "YU547UI",
+					new SimpleDateFormat("dd/MM/yyyy").parse("28/12/2018"), true));
+			automobileService.save(new Automobile("Opel", "Tigra", "XX127UI",
+					new SimpleDateFormat("dd/MM/yyyy").parse("28/12/1998"), false));
 			
+			//verifico inserimento
 			System.out.println("Elenco automobili");
 			automobileService.listAll().forEach(autoItem ->{
 				System.out.println(autoItem);
