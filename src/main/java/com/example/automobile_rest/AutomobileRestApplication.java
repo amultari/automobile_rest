@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import com.example.automobile_rest.model.Automobile;
-import com.example.automobile_rest.repository.AutomobileRepository;
+import com.example.automobile_rest.service.AutomobileService;
 
 @SpringBootApplication
 public class AutomobileRestApplication {
@@ -18,14 +18,14 @@ public class AutomobileRestApplication {
 	}
 
 	@Bean
-	public CommandLineRunner initAutomobili(AutomobileRepository automobileRepository) {
+	public CommandLineRunner initAutomobili(AutomobileService automobileService) {
 		return (args) -> {
 
-			automobileRepository.save(new Automobile("Fiat", "Tipo", "AB987UI",
+			automobileService.save(new Automobile("Fiat", "Tipo", "AB987UI",
 					new SimpleDateFormat("dd/MM/yyyy").parse("28/12/2018"), true));
 			
 			System.out.println("Elenco automobili");
-			automobileRepository.findAll().forEach(autoItem ->{
+			automobileService.listAll().forEach(autoItem ->{
 				System.out.println(autoItem);
 			});
 		};

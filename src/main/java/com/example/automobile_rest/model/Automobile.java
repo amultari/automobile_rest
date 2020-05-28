@@ -85,7 +85,7 @@ public class Automobile {
 
 	@Override
 	public String toString() {
-		return "Automobile [marca=" + marca + ", modello=" + modello + ", targa=" + targa + ", dataImmatricolazione="
+		return "Automobile [id="+id+", marca=" + marca + ", modello=" + modello + ", targa=" + targa + ", dataImmatricolazione="
 				+ dataImmatricolazione + ", inProduzione=" + inProduzione + "]";
 	}
 	
