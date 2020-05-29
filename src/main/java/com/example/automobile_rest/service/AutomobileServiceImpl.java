@@ -3,6 +3,10 @@ package com.example.automobile_rest.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.example.automobile_rest.model.Automobile;
@@ -17,6 +21,16 @@ public class AutomobileServiceImpl implements AutomobileService {
 	@Override
 	public List<Automobile> listAll() {
 		return (List<Automobile>) automobileRepository.findAll();
+	}
+
+	@Override
+	public Page<Automobile> searchAndPaginate(Automobile automobileExample, Integer pageNo, Integer pageSize,
+			String sortBy) {
+		Pageable paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
+
+		Page<Automobile> pagedResult = automobileRepository.findAll(paging);
+
+		return pagedResult;
 	}
 
 	@Override
