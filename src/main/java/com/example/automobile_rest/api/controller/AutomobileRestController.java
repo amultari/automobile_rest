@@ -3,7 +3,11 @@ package com.example.automobile_rest.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.automobile_rest.model.Automobile;
@@ -33,6 +38,16 @@ public class AutomobileRestController {
 		return automobileService.listAll();
 	}
 
+	@PostMapping("/search")
+	public ResponseEntity<Page<Automobile>> searchAndPagination(@RequestBody Automobile automobileExample,
+			@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "10") Integer pageSize,
+			@RequestParam(defaultValue = "id") String sortBy) {
+
+		Page<Automobile> results = automobileService.searchAndPaginate(automobileExample, pageNo, pageSize, sortBy);
+
+		return new ResponseEntity<Page<Automobile>>(results, new HttpHeaders(), HttpStatus.OK);
+	}
+
 	@PostMapping
 	public Automobile createNewAutomobile(@RequestBody Automobile automobileInput) {
 		return automobileService.save(automobileInput);
@@ -48,7 +63,7 @@ public class AutomobileRestController {
 		automobileToUpdate.setInProduzione(automobileInput.getInProduzione());
 		return automobileService.save(automobileToUpdate);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public void deleteAutomobile(@PathVariable(required = true) Long id) {
 		automobileService.delete(automobileService.get(id));
