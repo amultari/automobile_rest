@@ -1,6 +1,5 @@
 package com.example.automobile_rest.security.jwt;
 
-import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -22,18 +21,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 @Component
-public class JwtTokenUtil implements Serializable {
-
-	private static final long serialVersionUID = -3301605591108950415L;
+public class JwtTokenUtil {
 
 	static final String CLAIM_KEY_USERNAME = "sub";
 	static final String CLAIM_KEY_AUDIENCE = "audience";
 	static final String CLAIM_KEY_CREATED = "iat";
 	static final String CLAIM_KEY_AUTHORITIES = "roles";
 	static final String CLAIM_KEY_IS_ENABLED = "isEnabled";
-
-	private static final String AUDIENCE_MOBILE = "mobile";
-	private static final String AUDIENCE_TABLET = "tablet";
 
 	@Value("${jwt.secret}")
 	private String secret;
@@ -127,16 +121,9 @@ public class JwtTokenUtil implements Serializable {
 		return expiration.before(new Date());
 	}
 
-
-	private Boolean ignoreTokenExpiration(String token) {
-		String audience = getAudienceFromToken(token);
-		return (AUDIENCE_TABLET.equals(audience) || AUDIENCE_MOBILE.equals(audience));
-	}
-
 	public String generateToken(UserDetails userDetails) throws JsonProcessingException {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
-		//claims.put(CLAIM_KEY_AUDIENCE, generateAudience(AUDIENCE_WEB));
 		claims.put(CLAIM_KEY_CREATED, new Date());
 		List<String> auth = userDetails.getAuthorities().stream().map(role -> role.getAuthority())
 				.collect(Collectors.toList());
@@ -153,7 +140,7 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	public Boolean canTokenBeRefreshed(String token) {
-		return (!isTokenExpired(token) || ignoreTokenExpiration(token));
+		return !isTokenExpired(token);
 	}
 
 	public String refreshToken(String token) {

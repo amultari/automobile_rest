@@ -1,6 +1,5 @@
 package com.example.automobile_rest.security.jwt;
 
-
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
@@ -20,36 +19,39 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
+	@Autowired
+	private JwtTokenUtil jwtTokenUtil;
 
-    @Value("${jwt.header}")
-    private String tokenHeader;
+	@Value("${jwt.header}")
+	private String tokenHeader;
 
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
+		String authToken = request.getHeader(this.tokenHeader);
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        String authToken = request.getHeader(this.tokenHeader);
+		UserDetails userDetails = null;
 
-        UserDetails userDetails = null;
+		if (authToken != null) {
+			userDetails = jwtTokenUtil.getUserDetails(authToken);
+		}
 
-        if(authToken != null){
-            userDetails = jwtTokenUtil.getUserDetails(authToken);
-        }
+		if (userDetails != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-        if (userDetails != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+			// Ricostruisco l userdetails con i dati contenuti nel token
 
-            // Ricostruisco l userdetails con i dati contenuti nel token
+			// controllo integrita' token
+			if (jwtTokenUtil.validateToken(authToken, userDetails)) {
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
+		}
 
-
-            // controllo integrita' token
-            if (jwtTokenUtil.validateToken(authToken, userDetails)) {
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
-        }
-
-        chain.doFilter(request, response);
-    }
+		// Pass request down the chain, except for OPTIONS
+		if (!"OPTIONS".equalsIgnoreCase(request.getMethod())) {
+			chain.doFilter(request, response);
+		}
+	}
 }
