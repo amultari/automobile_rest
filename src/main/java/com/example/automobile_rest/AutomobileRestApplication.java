@@ -1,17 +1,33 @@
 package com.example.automobile_rest;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.example.automobile_rest.model.Automobile;
+import com.example.automobile_rest.model.security.Authority;
+import com.example.automobile_rest.model.security.AuthorityName;
+import com.example.automobile_rest.model.security.User;
+import com.example.automobile_rest.repository.security.AuthorityRepository;
+import com.example.automobile_rest.repository.security.UserRepository;
 import com.example.automobile_rest.service.AutomobileService;
 
 @SpringBootApplication
 public class AutomobileRestApplication {
+	
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	AuthorityRepository authorityRepository;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(AutomobileRestApplication.class, args);
@@ -54,6 +70,38 @@ public class AutomobileRestApplication {
 			automobileService.listAll().forEach(autoItem ->{
 				System.out.println(autoItem);
 			});
+			
+			//Ora la parte di sicurezza
+			User user=userRepository.findByUsername("admin");
+
+			if(user == null){
+
+				/**
+				 * Inizializzo i dati del mio test
+				 */
+
+
+				Authority authorityAdmin=new Authority();
+				authorityAdmin.setName(AuthorityName.ROLE_ADMIN);
+				authorityAdmin=authorityRepository.save(authorityAdmin);
+
+				Authority authorityUser=new Authority();
+				authorityUser.setName(AuthorityName.ROLE_USER);
+				authorityUser=authorityRepository.save(authorityUser);
+
+
+				List<Authority> authorities = Arrays.asList(new Authority[] {authorityAdmin,authorityUser});
+
+
+				user = new User();
+				user.setAuthorities(authorities);
+				user.setEnabled(true);
+				user.setUsername("admin");
+				user.setPassword(passwordEncoder.encode("admin"));
+
+				user = userRepository.save(user);
+
+			}
 		};
 	}
 
