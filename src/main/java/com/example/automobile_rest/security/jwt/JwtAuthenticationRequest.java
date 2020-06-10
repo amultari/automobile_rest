@@ -1,37 +1,35 @@
 package com.example.automobile_rest.security.jwt;
 
-import java.io.Serializable;
+import javax.validation.constraints.NotBlank;
 
+public class JwtAuthenticationRequest {
+	@NotBlank
+	private String username;
+	@NotBlank
+	private String password;
 
-public class  JwtAuthenticationRequest implements Serializable {
+	public JwtAuthenticationRequest() {
+		super();
+	}
 
-    private static final long serialVersionUID = -8445943548965154778L;
+	public JwtAuthenticationRequest(String username, String password) {
+		this.setUsername(username);
+		this.setPassword(password);
+	}
 
-    private String username;
-    private String password;
+	public String getUsername() {
+		return this.username;
+	}
 
-    public JwtAuthenticationRequest() {
-        super();
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public JwtAuthenticationRequest(String username, String password) {
-        this.setUsername(username);
-        this.setPassword(password);
-    }
+	public String getPassword() {
+		return this.password;
+	}
 
-    public String getUsername() {
-        return this.username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 }

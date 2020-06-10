@@ -1,4 +1,4 @@
-package com.example.automobile_rest.model.security;
+package com.example.automobile_rest.model;
 import java.util.List;
 
 import javax.persistence.Column;
