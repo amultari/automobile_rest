@@ -11,12 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.example.automobile_rest.model.Authority;
+import com.example.automobile_rest.model.AuthorityName;
 import com.example.automobile_rest.model.Automobile;
-import com.example.automobile_rest.model.security.Authority;
-import com.example.automobile_rest.model.security.AuthorityName;
-import com.example.automobile_rest.model.security.User;
-import com.example.automobile_rest.repository.security.AuthorityRepository;
-import com.example.automobile_rest.repository.security.UserRepository;
+import com.example.automobile_rest.model.User;
+import com.example.automobile_rest.security.repository.AuthorityRepository;
+import com.example.automobile_rest.security.repository.UserRepository;
 import com.example.automobile_rest.service.AutomobileService;
 
 @SpringBootApplication
@@ -72,7 +72,7 @@ public class AutomobileRestApplication {
 			});
 
 			// Ora la parte di sicurezza
-			User user = userRepository.findByUsername("admin");
+			User user = userRepository.findByUsername("admin").orElse(null);
 
 			if (user == null) {
 
@@ -95,12 +95,13 @@ public class AutomobileRestApplication {
 				user.setEnabled(true);
 				user.setUsername("admin");
 				user.setPassword(passwordEncoder.encode("admin"));
+				user.setEmail("admin@example.com");
 
 				user = userRepository.save(user);
 
 			}
 
-			User commonUser = userRepository.findByUsername("commonUser");
+			User commonUser = userRepository.findByUsername("commonUser").orElse(null);
 
 			if (commonUser == null) {
 
@@ -122,6 +123,7 @@ public class AutomobileRestApplication {
 				commonUser.setEnabled(true);
 				commonUser.setUsername("commonUser");
 				commonUser.setPassword(passwordEncoder.encode("commonUser"));
+				commonUser.setEmail("commonUser@example.com");
 
 				commonUser = userRepository.save(commonUser);
 

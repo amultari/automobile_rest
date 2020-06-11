@@ -1,4 +1,4 @@
-package com.example.automobile_rest.api.controller;
+package com.example.automobile_rest.controller.api;
 
 import java.util.List;
 
