@@ -58,20 +58,4 @@ public class AuthenticationRestController {
 												 roles));
 	}
 
-//    @RequestMapping(value = "protected/refresh-token", method = RequestMethod.GET)
-//    public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request, HttpServletResponse response) {
-//        String token = request.getHeader(tokenHeader);
-//        UserDetails userDetails =
-//                (UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//
-//        if (jwtTokenUtil.canTokenBeRefreshed(token)) {
-//            String refreshedToken = jwtTokenUtil.refreshToken(token);
-//            response.setHeader(tokenHeader,refreshedToken);
-//
-//            return ResponseEntity.ok(new JwtAuthenticationResponse(userDetails.getUsername(),userDetails.getAuthorities()));
-//        } else {
-//            return ResponseEntity.badRequest().body(null);
-//        }
-//    }
-
 }
