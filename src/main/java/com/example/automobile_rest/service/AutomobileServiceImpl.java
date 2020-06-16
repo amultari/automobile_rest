@@ -14,6 +14,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.example.automobile_rest.exceptions.AutomobileNotFoundException;
 import com.example.automobile_rest.model.Automobile;
 import com.example.automobile_rest.repository.AutomobileRepository;
 
@@ -37,13 +38,13 @@ public class AutomobileServiceImpl implements AutomobileService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (!StringUtils.isEmpty(automobileExample.getMarca()))
-				predicates.add(cb.like(root.get("marca"), "%" + automobileExample.getMarca() + "%"));
+				predicates.add(cb.like(cb.upper(root.get("marca")), "%" + automobileExample.getMarca().toUpperCase() + "%"));
 
 			if (!StringUtils.isEmpty(automobileExample.getModello()))
-				predicates.add(cb.like(root.get("modello"), "%" + automobileExample.getModello() + "%"));
+				predicates.add(cb.like(cb.upper(root.get("modello")), "%" + automobileExample.getModello().toUpperCase() + "%"));
 
 			if (!StringUtils.isEmpty(automobileExample.getTarga()))
-				predicates.add(cb.like(root.get("targa"), "%" + automobileExample.getTarga() + "%"));
+				predicates.add(cb.like(cb.upper(root.get("targa")), "%" + automobileExample.getTarga().toUpperCase() + "%"));
 
 			if (automobileExample.getDataImmatricolazione() != null)
 				predicates.add(cb.greaterThanOrEqualTo(root.get("dataImmatricolazione"),
@@ -66,7 +67,7 @@ public class AutomobileServiceImpl implements AutomobileService {
 	@Override
 	public Automobile get(Long idInput) {
 		return automobileRepository.findById(idInput)
-				.orElseThrow(() -> new RuntimeException("Element with id " + idInput + " not found."));
+				.orElseThrow(() -> new AutomobileNotFoundException("Element with id " + idInput + " not found."));
 	}
 
 	@Override
