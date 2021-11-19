@@ -93,6 +93,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Filtro Custom JWT
         httpSecurity.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
+        // inserisce negli header il Cache-Control: no-cache, no-store, max-age=0, must-revalidate...ecc.
         httpSecurity.headers().cacheControl();
     }
 }
