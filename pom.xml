@@ -13,6 +13,7 @@
 	<artifactId>automobile_rest</artifactId>
 	<version>1.0.1</version>
 	<name>automobile_rest</name>
+	<packaging>war</packaging>
 	<description>Progetto Spring Boot che usa H2 embedded per esporre su rest API Automobile</description>
 
 	<properties>
