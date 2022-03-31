@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.criteria.Predicate;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.example.automobile_rest.exceptions.AutomobileNotFoundException;
 import com.example.automobile_rest.model.Automobile;
@@ -38,13 +38,16 @@ public class AutomobileServiceImpl implements AutomobileService {
 			List<Predicate> predicates = new ArrayList<Predicate>();
 
 			if (!StringUtils.isEmpty(automobileExample.getMarca()))
-				predicates.add(cb.like(cb.upper(root.get("marca")), "%" + automobileExample.getMarca().toUpperCase() + "%"));
+				predicates.add(
+						cb.like(cb.upper(root.get("marca")), "%" + automobileExample.getMarca().toUpperCase() + "%"));
 
 			if (!StringUtils.isEmpty(automobileExample.getModello()))
-				predicates.add(cb.like(cb.upper(root.get("modello")), "%" + automobileExample.getModello().toUpperCase() + "%"));
+				predicates.add(cb.like(cb.upper(root.get("modello")),
+						"%" + automobileExample.getModello().toUpperCase() + "%"));
 
 			if (!StringUtils.isEmpty(automobileExample.getTarga()))
-				predicates.add(cb.like(cb.upper(root.get("targa")), "%" + automobileExample.getTarga().toUpperCase() + "%"));
+				predicates.add(
+						cb.like(cb.upper(root.get("targa")), "%" + automobileExample.getTarga().toUpperCase() + "%"));
 
 			if (automobileExample.getDataImmatricolazione() != null)
 				predicates.add(cb.greaterThanOrEqualTo(root.get("dataImmatricolazione"),
