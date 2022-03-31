@@ -17,7 +17,7 @@
 	<description>Progetto Spring Boot che usa H2 embedded per esporre su rest API Automobile</description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
